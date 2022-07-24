@@ -26,6 +26,11 @@ variable "os_version" {
   description = "Fedora CoreOS version to PXE and install (e.g. 31.20200310.3.0)"
 }
 
+variable "os_arch" {
+  type        = string
+  description = "Platform architecture to install (e.g. x86_64, aarch64)"
+}
+
 # machines
 
 variable "controllers" {

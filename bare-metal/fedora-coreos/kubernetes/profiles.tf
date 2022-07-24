@@ -1,8 +1,8 @@
 locals {
-  remote_kernel = "https://builds.coreos.fedoraproject.org/prod/streams/${var.os_stream}/builds/${var.os_version}/x86_64/fedora-coreos-${var.os_version}-live-kernel-x86_64"
+  remote_kernel = "https://builds.coreos.fedoraproject.org/prod/streams/${var.os_stream}/builds/${var.os_version}/${var.os_arch}/fedora-coreos-${var.os_version}-live-kernel-${var.os_arch}"
   remote_initrd = [
-    "https://builds.coreos.fedoraproject.org/prod/streams/${var.os_stream}/builds/${var.os_version}/x86_64/fedora-coreos-${var.os_version}-live-initramfs.x86_64.img",
-    "https://builds.coreos.fedoraproject.org/prod/streams/${var.os_stream}/builds/${var.os_version}/x86_64/fedora-coreos-${var.os_version}-live-rootfs.x86_64.img"
+    "https://builds.coreos.fedoraproject.org/prod/streams/${var.os_stream}/builds/${var.os_version}/${var.os_arch}/fedora-coreos-${var.os_version}-live-initramfs.${var.os_arch}.img",
+    "https://builds.coreos.fedoraproject.org/prod/streams/${var.os_stream}/builds/${var.os_version}/${var.os_arch}/fedora-coreos-${var.os_version}-live-rootfs.${var.os_arch}.img"
   ]
 
   remote_args = [
@@ -10,15 +10,15 @@ locals {
     "rd.neednet=1",
     "coreos.inst.install_dev=${var.install_disk}",
     "coreos.inst.ignition_url=${var.matchbox_http_endpoint}/ignition?uuid=$${uuid}&mac=$${mac:hexhyp}",
-    "coreos.inst.image_url=https://builds.coreos.fedoraproject.org/prod/streams/${var.os_stream}/builds/${var.os_version}/x86_64/fedora-coreos-${var.os_version}-metal.x86_64.raw.xz",
+    "coreos.inst.image_url=https://builds.coreos.fedoraproject.org/prod/streams/${var.os_stream}/builds/${var.os_version}/${var.os_arch}/fedora-coreos-${var.os_version}-metal.${var.os_arch}.raw.xz",
     "console=tty0",
     "console=ttyS0",
   ]
 
-  cached_kernel = "/assets/fedora-coreos/fedora-coreos-${var.os_version}-live-kernel-x86_64"
+  cached_kernel = "/assets/fedora-coreos/fedora-coreos-${var.os_version}-live-kernel-${var.os_arch}"
   cached_initrd = [
-    "/assets/fedora-coreos/fedora-coreos-${var.os_version}-live-initramfs.x86_64.img",
-    "/assets/fedora-coreos/fedora-coreos-${var.os_version}-live-rootfs.x86_64.img"
+    "/assets/fedora-coreos/fedora-coreos-${var.os_version}-live-initramfs.${var.os_arch}.img",
+    "/assets/fedora-coreos/fedora-coreos-${var.os_version}-live-rootfs.${var.os_arch}.img"
   ]
 
   cached_args = [
@@ -26,7 +26,7 @@ locals {
     "rd.neednet=1",
     "coreos.inst.install_dev=${var.install_disk}",
     "coreos.inst.ignition_url=${var.matchbox_http_endpoint}/ignition?uuid=$${uuid}&mac=$${mac:hexhyp}",
-    "coreos.inst.image_url=${var.matchbox_http_endpoint}/assets/fedora-coreos/fedora-coreos-${var.os_version}-metal.x86_64.raw.xz",
+    "coreos.inst.image_url=${var.matchbox_http_endpoint}/assets/fedora-coreos/fedora-coreos-${var.os_version}-metal.${var.os_arch}.raw.xz",
     "console=tty0",
     "console=ttyS0",
   ]

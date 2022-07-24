@@ -25,6 +25,11 @@ variable "os_version" {
   description = "Version of Flatcar Linux to PXE and install (e.g. 2079.5.1)"
 }
 
+variable "os_arch" {
+  type        = string
+  description = "Platform architecture to install (e.g. amd64, arm64)"
+}
+
 # machines
 
 variable "controllers" {
