@@ -8,10 +8,10 @@ resource "matchbox_profile" "flatcar-install" {
   count = length(var.controllers) + length(var.workers)
   name  = format("%s-flatcar-install-%s", var.cluster_name, concat(var.controllers.*.name, var.workers.*.name)[count.index])
 
-  kernel = "${var.download_protocol}://${local.channel}.release.flatcar-linux.net/${var.os_arch}-usr/${var.os_version}/flatcar_production_pxe.vmlinuz"
+  kernel = "${var.download_protocol}://${local.channel}.release.flatcar-linux.net/${concat(var.controllers.*.arch, var.workers.*.arch)[count.index]}/${var.os_version}-usr/${var.os_version}/flatcar_production_pxe.vmlinuz"
 
   initrd = [
-    "${var.download_protocol}://${local.channel}.release.flatcar-linux.net/${var.os_arch}-usr/${var.os_version}/flatcar_production_pxe_image.cpio.gz",
+    "${var.download_protocol}://${local.channel}.release.flatcar-linux.net/${concat(var.controllers.*.arch, var.workers.*.arch)[count.index]}/${var.os_version}-usr/${var.os_version}/flatcar_production_pxe_image.cpio.gz",
   ]
 
   args = flatten([
@@ -32,10 +32,10 @@ resource "matchbox_profile" "cached-flatcar-install" {
   count = length(var.controllers) + length(var.workers)
   name  = format("%s-cached-flatcar-linux-install-%s", var.cluster_name, concat(var.controllers.*.name, var.workers.*.name)[count.index])
 
-  kernel = "/assets/flatcar/${var.os_arch}/${var.os_version}/flatcar_production_pxe.vmlinuz"
+  kernel = "/assets/flatcar/${concat(var.controllers.*.arch, var.workers.*.arch)[count.index]}/${var.os_version}/flatcar_production_pxe.vmlinuz"
 
   initrd = [
-    "/assets/flatcar/${var.os_arch}/${var.os_version}/flatcar_production_pxe_image.cpio.gz",
+    "/assets/flatcar/${concat(var.controllers.*.arch, var.workers.*.arch)[count.index]}/${var.os_version}/flatcar_production_pxe_image.cpio.gz",
   ]
 
   args = flatten([
@@ -59,7 +59,7 @@ data "template_file" "install-configs" {
     os_channel         = local.channel
     os_version         = var.os_version
     ignition_endpoint  = format("%s/ignition", var.matchbox_http_endpoint)
-    install_disk       = var.install_disk
+    install_disk       = concat(var.controllers.*.install_disk, var.workers.*.install_disk)[count.index]
     ssh_authorized_key = var.ssh_authorized_key
     # only cached profile adds -b baseurl
     baseurl_flag = ""
@@ -75,10 +75,10 @@ data "template_file" "cached-install-configs" {
     os_channel         = local.channel
     os_version         = var.os_version
     ignition_endpoint  = format("%s/ignition", var.matchbox_http_endpoint)
-    install_disk       = var.install_disk
+    install_disk       = concat(var.controllers.*.install_disk, var.workers.*.install_disk)[count.index]
     ssh_authorized_key = var.ssh_authorized_key
     # profile uses -b baseurl to install from matchbox cache
-    baseurl_flag = "-b ${var.matchbox_http_endpoint}/assets/flatcar/${var.os_arch}"
+    baseurl_flag = "-b ${var.matchbox_http_endpoint}/assets/flatcar/${concat(var.controllers.*.arch, var.workers.*.arch)[count.index]}/${var.os_version}"
   }
 }
 

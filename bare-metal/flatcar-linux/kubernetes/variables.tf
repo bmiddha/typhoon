@@ -25,11 +25,6 @@ variable "os_version" {
   description = "Version of Flatcar Linux to PXE and install (e.g. 2079.5.1)"
 }
 
-variable "os_arch" {
-  type        = string
-  description = "Platform architecture to install (e.g. amd64, arm64)"
-}
-
 # machines
 
 variable "controllers" {
@@ -37,10 +32,12 @@ variable "controllers" {
     name   = string
     mac    = string
     domain = string
+    arch   = string
+    install_disk = string
   }))
   description = <<EOD
 List of controller machine details (unique name, identifying MAC address, FQDN)
-[{ name = "node1", mac = "52:54:00:a1:9c:ae", domain = "node1.example.com"}]
+[{ name = "node1", mac = "52:54:00:a1:9c:ae", domain = "node1.example.com", arch = "amd64", install_disk = "/dev/sda"}]
 EOD
 }
 
@@ -49,12 +46,14 @@ variable "workers" {
     name   = string
     mac    = string
     domain = string
+    arch   = string
+    install_disk = string
   }))
   description = <<EOD
 List of worker machine details (unique name, identifying MAC address, FQDN)
 [
-  { name = "node2", mac = "52:54:00:b2:2f:86", domain = "node2.example.com"},
-  { name = "node3", mac = "52:54:00:c3:61:77", domain = "node3.example.com"}
+  { name = "node2", mac = "52:54:00:b2:2f:86", domain = "node2.example.com", arch = "amd64", install_disk = "/dev/sda"},
+  { name = "node3", mac = "52:54:00:c3:61:77", domain = "node3.example.com", arch = "amd64", install_disk = "/dev/sda"}
 ]
 EOD
 }
@@ -134,12 +133,6 @@ variable "cached_install" {
   type        = bool
   description = "Whether Flatcar Linux should PXE boot and install from matchbox /assets cache. Note that the admin must have downloaded the os_version into matchbox assets."
   default     = false
-}
-
-variable "install_disk" {
-  type        = string
-  default     = "/dev/sda"
-  description = "Disk device to which the install profiles should install Flatcar Linux (e.g. /dev/sda)"
 }
 
 variable "kernel_args" {
