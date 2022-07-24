@@ -88,6 +88,10 @@ variable "ssh_authorized_key" {
   description = "SSH public key for user 'core'"
 }
 
+variable "password_hash" {
+  type = string
+}
+
 variable "networking" {
   type        = string
   description = "Choice of networking provider (flannel, calico, or cilium)"
