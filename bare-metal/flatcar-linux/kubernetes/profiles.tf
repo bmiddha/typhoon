@@ -80,7 +80,7 @@ data "template_file" "cached-install-configs" {
     ssh_authorized_key = var.ssh_authorized_key
     password_hash = var.password_hash
     # profile uses -b baseurl to install from matchbox cache
-    baseurl_flag = "-b ${var.matchbox_http_endpoint}/assets/flatcar/${concat(var.controllers.*.arch, var.workers.*.arch)[count.index]}/${var.os_version}"
+    baseurl_flag = "-b ${var.matchbox_http_endpoint}/assets/flatcar/${concat(var.controllers.*.arch, var.workers.*.arch)[count.index]}"
   }
 }
 
