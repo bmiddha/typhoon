@@ -61,6 +61,7 @@ data "template_file" "install-configs" {
     ignition_endpoint  = format("%s/ignition", var.matchbox_http_endpoint)
     install_disk       = var.install_disk
     ssh_authorized_key = var.ssh_authorized_key
+    password_hash = var.password_hash
     # only cached profile adds -b baseurl
     baseurl_flag = ""
   }
@@ -77,6 +78,7 @@ data "template_file" "cached-install-configs" {
     ignition_endpoint  = format("%s/ignition", var.matchbox_http_endpoint)
     install_disk       = var.install_disk
     ssh_authorized_key = var.ssh_authorized_key
+    password_hash = var.password_hash
     # profile uses -b baseurl to install from matchbox cache
     baseurl_flag = "-b ${var.matchbox_http_endpoint}/assets/flatcar/${var.os_arch}"
   }
@@ -109,6 +111,7 @@ data "template_file" "controller-configs" {
     cluster_dns_service_ip = module.bootstrap.cluster_dns_service_ip
     cluster_domain_suffix  = var.cluster_domain_suffix
     ssh_authorized_key     = var.ssh_authorized_key
+    password_hash = var.password_hash
   }
 }
 
@@ -136,6 +139,7 @@ data "template_file" "worker-configs" {
     cluster_dns_service_ip = module.bootstrap.cluster_dns_service_ip
     cluster_domain_suffix  = var.cluster_domain_suffix
     ssh_authorized_key     = var.ssh_authorized_key
+    password_hash = var.password_hash
     node_labels            = join(",", lookup(var.worker_node_labels, var.workers.*.name[count.index], []))
     node_taints            = join(",", lookup(var.worker_node_taints, var.workers.*.name[count.index], []))
   }
